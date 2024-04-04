@@ -336,6 +336,7 @@ func (d *dialScheduler) logStats() {
 	}
 	if d.dialPeers < dialStatsPeerLimit && d.dialPeers < d.maxDialPeers {
 		d.log.Info("Looking for peers", "peercount", len(d.peers), "tried", d.doneSinceLastLog, "static", len(d.static))
+		fmt.Printf("UPDATED ~~~~~~~~~~~~~~~~~~~~~~~~~~.\n")
 	}
 	d.doneSinceLastLog = 0
 	d.lastStatsLog = now
