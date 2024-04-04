@@ -448,6 +448,8 @@ func (api *FilterAPI) GetFilterChanges(id rpc.ID) (interface{}, error) {
 			f.hashes = nil
 			return returnHashes(hashes), nil
 		case PendingTransactionsSubscription:
+
+			fmt.Printf("PendingTransactionsSubscription@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@.\n")
 			if f.fullTx {
 				txs := make([]*ethapi.RPCTransaction, 0, len(f.txs))
 				for _, tx := range f.txs {
