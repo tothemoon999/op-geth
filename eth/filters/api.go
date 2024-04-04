@@ -115,6 +115,7 @@ func (api *FilterAPI) timeoutLoop(timeout time.Duration) {
 // It is part of the filter package because this filter can be used through the
 // `eth_getFilterChanges` polling method that is also used for log filters.
 func (api *FilterAPI) NewPendingTransactionFilter(fullTx *bool) rpc.ID {
+	fmt.Printf("API Pending ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~.\n");
 	var (
 		pendingTxs   = make(chan []*types.Transaction)
 		pendingTxSub = api.events.SubscribePendingTxs(pendingTxs)
