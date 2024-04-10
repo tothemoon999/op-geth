@@ -43,10 +43,9 @@ type NilPool struct{}
 func (n NilPool) Get(hash common.Hash) *types.Transaction { return nil }
 
 func (h *ethHandler) TxPool() eth.TxPool {
-	log.Info("TxPool function Log")
-	// if h.noTxGossip {
-	// 	return &NilPool{}
-	// }
+	if h.noTxGossip {
+		return &NilPool{}
+	}
 	return h.txpool
 }
 
@@ -66,10 +65,9 @@ func (h *ethHandler) PeerInfo(id enode.ID) interface{} {
 // AcceptTxs retrieves whether transaction processing is enabled on the node
 // or if inbound transactions should simply be dropped.
 func (h *ethHandler) AcceptTxs() bool {
-	log.Info("NoTxGossip Log")
-	// if h.noTxGossip {
-	// 	return false
-	// }
+	if h.noTxGossip {
+		return false
+	}
 	return h.synced.Load()
 }
 
