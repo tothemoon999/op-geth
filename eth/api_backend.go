@@ -293,8 +293,6 @@ func (b *EthAPIBackend) SubscribeLogsEvent(ch chan<- []*types.Log) event.Subscri
 }
 
 func (b *EthAPIBackend) SendTx(ctx context.Context, signedTx *types.Transaction) error {
-	return b.eth.txPool.Add([]*types.Transaction{signedTx}, true, false)[0]
-
 	if b.ChainConfig().IsOptimism() && signedTx.Type() == types.BlobTxType {
 		return types.ErrTxTypeNotSupported
 	}
@@ -306,20 +304,20 @@ func (b *EthAPIBackend) SendTx(ctx context.Context, signedTx *types.Transaction)
 		if err := b.eth.seqRPCService.CallContext(ctx, nil, "eth_sendRawTransaction", hexutil.Encode(data)); err != nil {
 			return err
 		}
-		if b.disableTxPool {
-			return nil
-		}
+		// if b.disableTxPool {
+		// 	return nil
+		// }
 		// Retain tx in local tx pool after forwarding, for local RPC usage.
 		if err := b.eth.txPool.Add([]*types.Transaction{signedTx}, true, false)[0]; err != nil {
 			log.Warn("successfully sent tx to sequencer, but failed to persist in local tx pool", "err", err, "tx", signedTx.Hash())
 		}
-		return nil
+		// return nil
+		return b.eth.txPool.Add([]*types.Transaction{signedTx}, true, false)[0]
 	}
-	if b.disableTxPool {
-		return nil
-	}
-
-	return nil
+	// if b.disableTxPool {
+	// 	return nil
+	// }
+	return b.eth.txPool.Add([]*types.Transaction{signedTx}, true, false)[0]
 }
 
 func (b *EthAPIBackend) GetPoolTransactions() (types.Transactions, error) {
