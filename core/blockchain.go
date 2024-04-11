@@ -2377,8 +2377,8 @@ func (bc *BlockChain) SetCanonical(head *types.Block) (common.Hash, error) {
 	bc.SubscribeChainHeadEvent(headCh)
 
 	// PendingLogEvent
-	pendingLogsCh := make(chan []*types.Log, 10)
-	bc.SubscribePendingLogsEvent(pendingLogsCh)
+	// pendingLogsCh := make(chan []*types.Log, 10)
+	// bc.SubscribePendingLogsEvent(pendingLogsCh)
 
 	return head.Hash(), nil
 }
