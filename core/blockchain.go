@@ -2372,13 +2372,12 @@ func (bc *BlockChain) SetCanonical(head *types.Block) (common.Hash, error) {
 	
 	// Listening to chain events and manipulate the transaction indexes.
 	var (
-		done   chan struct{}                  // Non-nil if background unindexing or reindexing routine is active.
 		headCh = make(chan ChainHeadEvent, 1) // Buffered to avoid locking up the event feed
 	)
-	sub := bc.SubscribeChainHeadEvent(headCh)
+	bc.SubscribeChainHeadEvent(headCh)
 
 	// PendingLogEvent
-	pendingLogsCh: make(chan []*types.Log, 10)
+	pendingLogsCh := make(chan []*types.Log, 10)
 	bc.SubscribePendingLogsEvent(pendingLogsCh)
 
 	return head.Hash(), nil
