@@ -273,14 +273,19 @@ func (b *EthAPIBackend) SubscribeRemovedLogsEvent(ch chan<- core.RemovedLogsEven
 }
 
 func (b *EthAPIBackend) SubscribePendingLogsEvent(ch chan<- []*types.Log) event.Subscription {
+	log.Info("SubscribePendingLogsEvent is called")
+	log.Info("SubscribePendingLogsEvent is called", ch)
 	return b.eth.miner.SubscribePendingLogs(ch)
 }
 
 func (b *EthAPIBackend) SubscribeChainEvent(ch chan<- core.ChainEvent) event.Subscription {
+	log.Info("SubscribeChainEvent is called")
+	log.Info("SubscribeChainEvent is called", ch)
 	return b.eth.BlockChain().SubscribeChainEvent(ch)
 }
 
 func (b *EthAPIBackend) SubscribeChainHeadEvent(ch chan<- core.ChainHeadEvent) event.Subscription {
+	log.Info("SubscribeChainHeadEvent is called", ch)
 	return b.eth.BlockChain().SubscribeChainHeadEvent(ch)
 }
 
@@ -294,7 +299,7 @@ func (b *EthAPIBackend) SubscribeLogsEvent(ch chan<- []*types.Log) event.Subscri
 
 func (b *EthAPIBackend) SendTx(ctx context.Context, signedTx *types.Transaction) error {
 	log.Info("SendTx is called")
-	
+
 	if b.ChainConfig().IsOptimism() && signedTx.Type() == types.BlobTxType {
 		return types.ErrTxTypeNotSupported
 	}
