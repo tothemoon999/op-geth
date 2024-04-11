@@ -2371,10 +2371,10 @@ func (bc *BlockChain) SetCanonical(head *types.Block) (common.Hash, error) {
 	log.Info("Chain head was updated!!!", context...)
 	
 	// Listening to chain events and manipulate the transaction indexes.
-	var (
-		headCh = make(chan ChainHeadEvent, 1) // Buffered to avoid locking up the event feed
-	)
-	bc.SubscribeChainHeadEvent(headCh)
+	// var (
+	// 	headCh = make(chan ChainHeadEvent, 1) // Buffered to avoid locking up the event feed
+	// )
+	// bc.SubscribeChainHeadEvent(headCh)
 
 	// PendingLogEvent
 	// pendingLogsCh := make(chan []*types.Log, 10)
