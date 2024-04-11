@@ -273,13 +273,11 @@ func (b *EthAPIBackend) SubscribeRemovedLogsEvent(ch chan<- core.RemovedLogsEven
 }
 
 func (b *EthAPIBackend) SubscribePendingLogsEvent(ch chan<- []*types.Log) event.Subscription {
-	log.Info("SubscribePendingLogsEvent is called")
 	log.Info("SubscribePendingLogsEvent is called", ch)
 	return b.eth.miner.SubscribePendingLogs(ch)
 }
 
 func (b *EthAPIBackend) SubscribeChainEvent(ch chan<- core.ChainEvent) event.Subscription {
-	log.Info("SubscribeChainEvent is called")
 	log.Info("SubscribeChainEvent is called", ch)
 	return b.eth.BlockChain().SubscribeChainEvent(ch)
 }
@@ -311,19 +309,18 @@ func (b *EthAPIBackend) SendTx(ctx context.Context, signedTx *types.Transaction)
 		if err := b.eth.seqRPCService.CallContext(ctx, nil, "eth_sendRawTransaction", hexutil.Encode(data)); err != nil {
 			return err
 		}
-		// if b.disableTxPool {
-		// 	return nil
-		// }
+		if b.disableTxPool {
+			return nil
+		}
 		// Retain tx in local tx pool after forwarding, for local RPC usage.
 		if err := b.eth.txPool.Add([]*types.Transaction{signedTx}, true, false)[0]; err != nil {
 			log.Warn("successfully sent tx to sequencer, but failed to persist in local tx pool", "err", err, "tx", signedTx.Hash())
 		}
-		// return nil
-		return b.eth.txPool.Add([]*types.Transaction{signedTx}, true, false)[0]
+		return nil
 	}
-	// if b.disableTxPool {
-	// 	return nil
-	// }
+	if b.disableTxPool {
+		return nil
+	}
 	return b.eth.txPool.Add([]*types.Transaction{signedTx}, true, false)[0]
 }
 
